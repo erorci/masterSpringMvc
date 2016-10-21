@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class ProfileController {
+	
+	@Autowired
+	private UserProfileSession userProfileSession;
 
 	@RequestMapping("/profile")
 	public String displayProfile(ProfileForm profileForm) {
@@ -29,8 +33,9 @@ public class ProfileController {
 		if (bindingResult.hasErrors()) {
 			return "profile/profilePage";
 		}
-		System.out.println("save ok" + profileForm);
-		return "redirect:/profile";
+		userProfileSession.saveForm(profileForm);
+		return "redirect:/search/mixed;keywords=" + String.join(",",
+				profileForm.getTastes());
 	}
 
 	@RequestMapping(value = "/profile", params = { "addTaste" })
