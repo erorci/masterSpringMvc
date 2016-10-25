@@ -1,15 +1,24 @@
 package masterSpringMvc.user.api;
 
-import masterSpringMvc.user.User;
-import masterSpringMvc.user.UserRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import masterSpringMvc.error.EntityNotFoundException;
+import masterSpringMvc.user.User;
+import masterSpringMvc.user.UserRepository;
 
 @RestController
 @RequestMapping("/api")
+@Secured("ROLE_ADMIN")
 public class UserApiController {
 	private UserRepository userRepository;
 
@@ -38,12 +47,12 @@ public class UserApiController {
 		if (!userRepository.exists(user.getEmail())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		User saved = userRepository.save(email, user);
+		User saved = userRepository.save(user);
 		return new ResponseEntity<>(saved, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/user/{email}", method = RequestMethod.DELETE)
-	public ResponseEntity<User> deleteUser(@PathVariable String email) {
+	public ResponseEntity<User> deleteUser(@PathVariable String email) throws EntityNotFoundException {
 		if (!userRepository.exists(email)) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

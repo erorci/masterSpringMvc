@@ -21,7 +21,7 @@ public class UserRepository {
 		return userMap.put(email, user);
 	}
 
-	public User save(String email, User user) {
+	public User save(User user) {
 		return userMap.put(user.getEmail(), user);
 	}
 
