@@ -11,6 +11,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.formLogin()
 			.loginPage("/login")
 			.defaultSuccessUrl("/profile").and().logout().logoutSuccessUrl("/login").and()
-				.authorizeRequests().antMatchers("/webjars/**", "/login").permitAll().anyRequest().authenticated();
+				.authorizeRequests().antMatchers("/webjars/**", "/login", "/signin/**", "/signup").permitAll().anyRequest().authenticated();
+		
+		
 	}
 }
